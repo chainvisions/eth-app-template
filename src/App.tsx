@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, lazy } from 'react'
+import React, { useCallback, useEffect, useState, Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
@@ -6,6 +6,7 @@ import { UseWalletProvider } from 'use-wallet'
 // Components
 import MobileMenu from './components/MobileMenu'
 import TopBar from './components/TopBar'
+import PageLoader from './components/PageLoader'
 
 //Contexts
 import ModalsProvider from './contexts/Modals'
@@ -34,11 +35,13 @@ const App: React.FC = () => {
       <Router>
         <TopBar onPresentMobileMenu={handlePresentMobileMenu} />
         <MobileMenu onDismiss={handleDismissMobileMenu} visible={mobileMenu} />
-        <Switch>
-          <Route path="/" exact>
-            <Home />
-          </Route>
-        </Switch>
+        <Suspense fallback={<PageLoader />}>
+          <Switch>
+            <Route path="/" exact>
+              <Home />
+            </Route>
+          </Switch>
+        </Suspense>
       </Router>
     </Providers>
   )
